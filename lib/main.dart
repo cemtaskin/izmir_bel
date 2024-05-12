@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:izmir_bel/infrastructure/web_service.dart';
+import 'package:izmir_bel/screens/hal_mevye_sebze_list_screen.dart';
 import 'package:izmir_bel/screens/isletme_list_screen.dart';
 
 void main() {
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const IsletmeListScreen(),
+      home: const HalMeyveSebzeListScreen(),
     );
   }
 }

@@ -1,20 +1,21 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:izmir_bel/components/isletme_item.dart';
+import 'package:izmir_bel/components/hal_sebze_meyve_item.dart';
 import 'package:izmir_bel/infrastructure/web_service.dart';
-import 'package:izmir_bel/models/isletmeler_response.dart';
+import 'package:izmir_bel/models/hal_fiyat_listesi.dart';
 
-class IsletmeListScreen extends StatefulWidget {
-  const IsletmeListScreen({super.key});
+class HalMeyveSebzeListScreen extends StatefulWidget {
+  const HalMeyveSebzeListScreen({super.key});
 
   @override
-  State<IsletmeListScreen> createState() => _IsletmeListScreenState();
+  State<HalMeyveSebzeListScreen> createState() =>
+      _HalMeyveSebzeListScreenState();
 }
 
-class _IsletmeListScreenState extends State<IsletmeListScreen> {
+class _HalMeyveSebzeListScreenState extends State<HalMeyveSebzeListScreen> {
   bool _isWorking = true;
   var _webService = webService();
-  var _responseData = List.generate(0, (index) => IsletmelerResponse());
+  var _responseData = List.generate(0, (index) => HalFiyatListesi());
   var _searchTextInputController = TextEditingController();
 
   @override
@@ -27,22 +28,19 @@ class _IsletmeListScreenState extends State<IsletmeListScreen> {
     });
 
     _webService.getHalFiyatlariSebzeMevye().then((value) {
-      print(value);
-    });
+      _isWorking = false;
+      _responseData = value;
 
-    _webService.getIsletmeler().then((value) {
-      setState(() {
-        _isWorking = false;
-        _responseData = value;
-      });
+      setState(() {});
     });
   }
 
   @override
   Widget build(BuildContext context) {
     var _filteredList = _responseData
-        .where((element) =>
-            element.tabelaAdi!.contains(_searchTextInputController.text))
+        .where((element) => element.malAdi!
+            .toUpperCase()
+            .contains(_searchTextInputController.text.toUpperCase()))
         .toList();
 
     return SafeArea(
@@ -62,8 +60,8 @@ class _IsletmeListScreenState extends State<IsletmeListScreen> {
                       child: ListView.builder(
                         itemCount: _filteredList.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return IsletmeItem(
-                            isletmelerResponse: _filteredList[index],
+                          return HalSebzeMeyveItem(
+                            halFiyatListesi: _filteredList[index],
                           );
                         },
                       ),
